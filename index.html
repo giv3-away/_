@@ -26,31 +26,20 @@
     .top-item {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       cursor: pointer;
     }
-    .robux-icon {
-      width: 22px;
-      height: 22px;
-      display: inline-block;
+    #robuxCounter {
+      font-size: 16px;
     }
-    .robux-icon svg {
-      width: 100%;
-      height: 100%;
-    }
-    /* For top bar */
-    .robux-top svg .bg { fill: #1446FF; }
-    /* For white cards */
-    .robux-card svg .bg { fill: #fff; }
-
     #fakeFeed {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
       font-size: 14px;
       white-space: nowrap;
-      color: #fff;
-      display: none;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
     }
 
     /* Main content */
@@ -59,15 +48,15 @@
       text-align: center;
     }
 
-    button.ad-btn {
+    button {
       background: none;
       border: none;
-      font-size: 50px;
+      font-size: 40px;
       cursor: pointer;
       margin: 20px 0;
     }
 
-    /* Sections */
+    /* Section */
     #offerwall, #ads, #reward {
       margin-top: 30px;
       background: white;
@@ -143,143 +132,148 @@
   <!-- Top bar -->
   <header>
     <div class="top-item">
-      <span class="robux-icon robux-top">
-        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-          <rect class="bg" width="512" height="512" rx="100"/>
-          <path d="M256 100l156 156-156 156-156-156z" fill="white"/>
-        </svg>
-      </span>
-      <span id="robuxCounter">0</span>
-    </div>
-    <div class="top-item" id="cashoutBtn">
-      <span class="robux-icon robux-top">
-        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-          <rect class="bg" width="512" height="512" rx="100"/>
-          <path d="M256 100l156 156-156 156-156-156z" fill="white"/>
-        </svg>
-      </span>
-      <span>Cash Out</span>
+      <span id="robuxCounter">0</span> Robux
     </div>
     <span id="fakeFeed"></span>
+    <div class="top-item" onclick="openCashout()">
+      <span>Cashout</span>
+    </div>
   </header>
 
   <!-- Main -->
   <main>
-    <!-- Ads -->
-    <section id="ads">
-      <h2>Complete offer for 10 
-        <span class="robux-icon robux-card">
-          <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-            <rect class="bg" width="512" height="512" rx="100"/>
-            <path d="M256 100l156 156-156 156-156-156z" fill="black"/>
-          </svg>
-        </span>
-      </h2>
-      <button class="ad-btn" onclick="watchAd()">▶️</button>
+    <!-- Offers -->
+    <section id="offerwall">
+      <h2>Complete offer for 10 Robux</h2>
+      <div style="height:150px; overflow-y:auto;">
+        <!-- Offers list will go here later -->
+      </div>
     </section>
 
-    <!-- Reward progress -->
+    <!-- Ads -->
+    <section id="ads">
+      <h2>Watch Ad for 2 Robux</h2>
+      <button onclick="addRobux(2)">▶️</button>
+    </section>
+
+    <!-- Reward -->
     <section id="reward">
-      <h2>Your Progress</h2>
+      <h2>Collect 50 Robux for a prize</h2>
       <div class="progress-container">
         <div class="progress-bar" id="progressBar"></div>
       </div>
+      <button id="rewardButton" style="display:none;" onclick="collectReward()">💰</button>
     </section>
   </main>
 
   <!-- Popups -->
-  <div class="popup" id="popupMessage">
-    <span class="close-btn" onclick="closePopup('popupMessage')">✖</span>
-    <p id="popupText"></p>
+  <div class="popup" id="popupError">
+    <span class="close-btn" onclick="closePopup('popupError')">✖</span>
+    <p>At least 1000 Robux</p>
   </div>
 
   <div class="popup" id="popupUsername">
-    <textarea id="usernameInput" placeholder="Username..."></textarea>
+    <textarea placeholder="Username..."></textarea>
     <button onclick="confirmUsername()">Confirm</button>
   </div>
 
   <div class="popup" id="popupAmount">
-    <textarea id="amountInput" placeholder="Amount of Robux..."></textarea>
+    <textarea placeholder="Amount of Robux..."></textarea>
     <button onclick="confirmAmount()">Confirm</button>
   </div>
 
-  <div class="popup" id="popupFinal">
-    <span class="close-btn" onclick="closePopup('popupFinal')">✖</span>
-    <p id="finalText"></p>
+  <div class="popup" id="popupSuccess">
+    <span class="close-btn" onclick="closePopup('popupSuccess')">✖</span>
+    <p id="successMessage"></p>
     <small>Might take some time.</small>
   </div>
 
   <script>
     // Robux counter
     let robux = parseInt(localStorage.getItem("robux") || "0");
-    let username = "";
-    let amount = 0;
-
     function updateCounter() {
       document.getElementById("robuxCounter").innerText = robux;
     }
-    updateCounter();
-
-    function watchAd() {
-      robux += 10;
+    function addRobux(amount) {
+      robux += amount;
       localStorage.setItem("robux", robux);
       updateCounter();
-      updateProgress();
+      updateProgress(amount);
     }
+    updateCounter();
 
     // Progress bar
-    function updateProgress() {
-      let percent = Math.min((robux / 5000) * 100, 100);
-      document.getElementById("progressBar").style.width = percent + "%";
+    let progress = 0;
+    function updateProgress(amount) {
+      progress += amount;
+      if (progress >= 50) {
+        progress = 50;
+        document.getElementById("rewardButton").style.display = "inline-block";
+      }
+      document.getElementById("progressBar").style.width = (progress/50*100) + "%";
     }
-    updateProgress();
+    function collectReward() {
+      let reward = Math.floor(Math.random() * 11) + 10; // 10-20
+      addRobux(reward);
+      progress = 0;
+      document.getElementById("progressBar").style.width = "0%";
+      document.getElementById("rewardButton").style.display = "none";
+    }
 
-    // Cashout logic
-    document.getElementById("cashoutBtn").onclick = () => {
+    // Cashout system
+    let cashoutUsername = "";
+    function openCashout() {
       if (robux < 1000) {
-        document.getElementById("popupText").innerHTML = 
-          "At least 1000 <span class='robux-icon robux-card'><svg viewBox='0 0 512 512'><rect class='bg' width='512' height='512' rx='100'/><path d='M256 100l156 156-156 156-156-156z' fill='black'/></svg></span> required";
-        document.getElementById("popupMessage").style.display = "block";
+        showPopup("popupError");
       } else {
-        document.getElementById("popupUsername").style.display = "block";
-      }
-    };
-
-    function confirmUsername() {
-      username = document.getElementById("usernameInput").value.trim();
-      if (username) {
-        document.getElementById("popupUsername").style.display = "none";
-        document.getElementById("popupAmount").style.display = "block";
+        showPopup("popupUsername");
       }
     }
-
+    function confirmUsername() {
+      cashoutUsername = document.querySelector("#popupUsername textarea").value.trim();
+      if (cashoutUsername) {
+        closePopup("popupUsername");
+        showPopup("popupAmount");
+      }
+    }
     function confirmAmount() {
-      amount = parseInt(document.getElementById("amountInput").value.trim());
-      if (amount > 0 && amount <= robux) {
-        document.getElementById("popupAmount").style.display = "none";
-        document.getElementById("finalText").innerHTML = 
-          username + " cashed out " + amount + " <span class='robux-icon robux-card'><svg viewBox='0 0 512 512'><rect class='bg' width='512' height='512' rx='100'/><path d='M256 100l156 156-156 156-156-156z' fill='black'/></svg></span>";
-        document.getElementById("popupFinal").style.display = "block";
+      let amount = parseInt(document.querySelector("#popupAmount textarea").value.trim());
+      if (!isNaN(amount) && amount > 0 && amount <= robux) {
         robux -= amount;
         localStorage.setItem("robux", robux);
         updateCounter();
-        updateProgress();
+        closePopup("popupAmount");
+        document.getElementById("successMessage").innerHTML = 
+          cashoutUsername + " cashed out " + amount + " Robux";
+        showPopup("popupSuccess");
       }
     }
 
+    function showPopup(id) {
+      document.getElementById(id).style.display = "block";
+    }
     function closePopup(id) {
       document.getElementById(id).style.display = "none";
     }
 
     // Fake feed
     const fakeFeed = document.getElementById("fakeFeed");
-    const users = ["xPro123", "NoobSlayer", "KittyLover", "DarkNinja", "Guest777"];
+    const baseWords = [
+      "moon","star","fire","wind","rock","sand","wave","tree","lion","frog",
+      "wolf","snow","rain","dark","void","dust","bird","iron","gold","lava"
+    ];
+    function randomUsername() {
+      let word = baseWords[Math.floor(Math.random() * baseWords.length)];
+      let letters = String.fromCharCode(97 + Math.floor(Math.random()*26)) +
+                    String.fromCharCode(97 + Math.floor(Math.random()*26));
+      return word + letters;
+    }
     function showFakeFeed() {
-      const user = users[Math.floor(Math.random() * users.length)];
-      const amt = Math.floor(Math.random() * 4000) + 1000;
-      fakeFeed.innerHTML = user + " cashed out " + amt + " <span class='robux-icon robux-top'><svg viewBox='0 0 512 512'><rect class='bg' width='512' height='512' rx='100'/><path d='M256 100l156 156-156 156-156-156z' fill='white'/></svg></span>";
-      fakeFeed.style.display = "block";
-      setTimeout(() => { fakeFeed.style.display = "none"; }, 5000);
+      let user = randomUsername();
+      let amount = Math.floor(Math.random() * 4001) + 1000; // 1000-5000
+      fakeFeed.innerHTML = user + " cashed out " + amount + " Robux";
+      fakeFeed.style.opacity = 1;
+      setTimeout(()=>{ fakeFeed.style.opacity = 0; }, 5000);
     }
     setInterval(showFakeFeed, 30000);
   </script>
