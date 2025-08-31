@@ -21,124 +21,108 @@
       align-items: center;
       padding: 12px 20px;
       font-weight: bold;
+      position: relative;
     }
     .top-item {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+      cursor: pointer;
     }
     .top-item img {
       width: 24px;
       height: 24px;
     }
-
-    /* Activity feed */
-    #feed {
-      margin: 20px auto;
-      padding: 10px;
-      max-width: 500px;
-      font-size: 15px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    #fakeFeed {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 14px;
+      white-space: nowrap;
     }
 
-    /* Offers */
-    #offers {
-      margin: 20px auto;
-      max-width: 500px;
-      background: #fff;
+    /* Main content */
+    main {
+      padding: 20px;
+      text-align: center;
+    }
+
+    button {
+      background: none;
+      border: none;
+      font-size: 40px;
+      cursor: pointer;
+      margin: 20px 0;
+    }
+
+    /* Section */
+    #offerwall, #ads, #reward {
+      margin-top: 30px;
+      background: white;
       border-radius: 10px;
       padding: 15px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      text-align: left;
-      max-height: 250px;
-      overflow-y: auto;
+      text-align: center;
     }
-    #offers h2 {
-      font-size: 18px;
+    #offerwall h2, #ads h2, #reward h2 {
+      font-size: 20px;
       margin-bottom: 12px;
       color: #1446FF;
     }
-    .offer {
-      padding: 10px;
-      border-bottom: 1px solid #eee;
-      cursor: pointer;
-    }
-    .offer:last-child {
-      border-bottom: none;
-    }
 
-    /* Ads */
-    #ads {
-      margin: 30px auto;
-      text-align: center;
-      max-width: 500px;
-      background: #fff;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-    #ads h2 {
-      color: #1446FF;
-    }
-    .yt-icon {
-      width: 60px;
-      height: 42px;
-      background: #1446FF;
-      display: inline-block;
-      clip-path: polygon(0 0, 100% 50%, 0 100%);
-      margin-top: 15px;
-    }
-    button {
-      background: #1446FF;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin: 20px 0;
-      transition: background 0.3s;
-    }
-    button:hover {
-      background: #0f34c9;
-    }
-
-    /* Prize progress */
-    #prize {
-      margin: 30px auto;
-      max-width: 500px;
-      background: #fff;
-      border-radius: 10px;
-      padding: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      text-align: center;
-    }
-    #progressBar {
-      width: 100%;
-      height: 20px;
-      background: #eee;
-      border-radius: 10px;
-      margin: 15px 0;
+    /* Progress bar */
+    .progress-container {
+      background: #ddd;
+      border-radius: 20px;
       overflow: hidden;
+      height: 20px;
+      margin: 15px 0;
     }
-    #progressFill {
+    .progress-bar {
       height: 100%;
       width: 0%;
       background: #1446FF;
       transition: width 0.3s;
     }
-    #claimBtn {
+
+    /* Popup styles */
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #eee;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       display: none;
+      z-index: 1000;
+      text-align: center;
+      width: 300px;
+    }
+    .popup textarea {
+      width: 90%;
+      padding: 8px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      resize: none;
+    }
+    .popup button {
       background: #1446FF;
       color: #fff;
       border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
+      padding: 10px 20px;
+      border-radius: 6px;
       cursor: pointer;
-      margin-top: 10px;
-      font-size: 16px;
+      font-size: 14px;
+    }
+    .popup .close-btn {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      font-size: 18px;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -147,93 +131,142 @@
   <!-- Top bar -->
   <header>
     <div class="top-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" alt="Cash Out">
-      <span>Cash Out</span>
-    </div>
-    <div class="top-item">
-      <span id="robuxCounter">0</span>
       <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" alt="Robux">
+      <span id="robuxCounter">0</span>
+    </div>
+    <span id="fakeFeed"></span>
+    <div class="top-item" onclick="openCashout()">
+      <img src="https://cdn-icons-png.flaticon.com/512/1040/1040230.png" alt="Cash Out">
+      <span>Cash Out</span>
     </div>
   </header>
 
-  <!-- Activity feed -->
-  <div id="feed">
-    <p><strong>User123</strong> cashed out 200 <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" width="14"></p>
+  <!-- Main -->
+  <main>
+    <!-- Offers -->
+    <section id="offerwall">
+      <h2>Complete offer for 10 <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" style="width:16px;height:16px;vertical-align:middle"></h2>
+      <div style="height:150px; overflow-y:auto;">
+        <!-- Offers list will go here later -->
+      </div>
+    </section>
+
+    <!-- Ads -->
+    <section id="ads">
+      <h2>Watch Ad for 2 <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" style="width:16px;height:16px;vertical-align:middle"></h2>
+      <button onclick="addRobux(2)">▶️</button>
+    </section>
+
+    <!-- Reward -->
+    <section id="reward">
+      <h2>Collect 50 <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" style="width:16px;height:16px;vertical-align:middle"> for a prize</h2>
+      <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <button id="rewardButton" style="display:none;" onclick="collectReward()">💰</button>
+    </section>
+  </main>
+
+  <!-- Popups -->
+  <div class="popup" id="popupError">
+    <span class="close-btn" onclick="closePopup('popupError')">✖</span>
+    <p>At least 1000 <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" style="width:16px;height:16px;vertical-align:middle"></p>
   </div>
 
-  <!-- Offers -->
-  <section id="offers">
-    <h2>Complete offer for 10 <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" width="14"></h2>
-    <div class="offer">[Offer Placeholder 1]</div>
-    <div class="offer">[Offer Placeholder 2]</div>
-    <div class="offer">[Offer Placeholder 3]</div>
-    <div class="offer">[Offer Placeholder 4]</div>
-  </section>
+  <div class="popup" id="popupUsername">
+    <textarea placeholder="Username..."></textarea>
+    <button onclick="confirmUsername()">Confirm</button>
+  </div>
 
-  <!-- Ads -->
-  <section id="ads">
-    <h2>Watch Ad for 2 <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" width="14"></h2>
-    <div class="yt-icon"></div>
-    <br>
-    <button onclick="watchAd()">▶ Watch Ad</button>
-  </section>
+  <div class="popup" id="popupAmount">
+    <textarea placeholder="Amount of Robux..."></textarea>
+    <button onclick="confirmAmount()">Confirm</button>
+  </div>
 
-  <!-- Prize progress -->
-  <section id="prize">
-    <h2>Collect 50 <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" width="14"> for a prize</h2>
-    <div id="progressBar">
-      <div id="progressFill"></div>
-    </div>
-    <button id="claimBtn" onclick="claimPrize()">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" width="20">
-    </button>
-  </section>
+  <div class="popup" id="popupSuccess">
+    <span class="close-btn" onclick="closePopup('popupSuccess')">✖</span>
+    <p id="successMessage"></p>
+    <small>Might take some time.</small>
+  </div>
 
   <script>
-    // Robux counter (localStorage)
+    // Robux counter
     let robux = parseInt(localStorage.getItem("robux") || "0");
     function updateCounter() {
       document.getElementById("robuxCounter").innerText = robux;
-      updateProgress();
     }
     function addRobux(amount) {
       robux += amount;
       localStorage.setItem("robux", robux);
       updateCounter();
+      updateProgress(amount);
     }
     updateCounter();
 
-    // Watch Ad simulation
-    function watchAd() {
-      addRobux(2);
-      addFeed("You earned 2 Robux from watching an ad!");
+    // Progress bar
+    let progress = 0;
+    function updateProgress(amount) {
+      progress += amount;
+      if (progress >= 50) {
+        progress = 50;
+        document.getElementById("rewardButton").style.display = "inline-block";
+      }
+      document.getElementById("progressBar").style.width = (progress/50*100) + "%";
+    }
+    function collectReward() {
+      let reward = Math.floor(Math.random() * 11) + 10; // 10-20
+      addRobux(reward);
+      progress = 0;
+      document.getElementById("progressBar").style.width = "0%";
+      document.getElementById("rewardButton").style.display = "none";
     }
 
-    // Activity feed
-    function addFeed(msg) {
-      const feed = document.getElementById("feed");
-      const p = document.createElement("p");
-      p.innerHTML = msg + ' <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" width="14">';
-      feed.prepend(p);
-    }
-
-    // Prize system
-    function updateProgress() {
-      const percent = Math.min((robux % 50) / 50 * 100, 100);
-      document.getElementById("progressFill").style.width = percent + "%";
-      if (robux % 50 === 0 && robux > 0) {
-        document.getElementById("claimBtn").style.display = "inline-block";
+    // Cashout system
+    let cashoutUsername = "";
+    function openCashout() {
+      if (robux < 1000) {
+        showPopup("popupError");
       } else {
-        document.getElementById("claimBtn").style.display = "none";
+        showPopup("popupUsername");
       }
     }
-    function claimPrize() {
-      const bonus = Math.floor(Math.random() * 11) + 10; // 10–20
-      addRobux(bonus);
-      addFeed("You claimed a prize of " + bonus + " Robux!");
-      document.getElementById("claimBtn").style.display = "none";
+    function confirmUsername() {
+      cashoutUsername = document.querySelector("#popupUsername textarea").value.trim();
+      if (cashoutUsername) {
+        closePopup("popupUsername");
+        showPopup("popupAmount");
+      }
     }
-  </script>
+    function confirmAmount() {
+      let amount = parseInt(document.querySelector("#popupAmount textarea").value.trim());
+      if (!isNaN(amount) && amount > 0 && amount <= robux) {
+        robux -= amount;
+        localStorage.setItem("robux", robux);
+        updateCounter();
+        closePopup("popupAmount");
+        document.getElementById("successMessage").innerHTML = 
+          cashoutUsername + " cashed out " + amount + " <img src='https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg' style='width:16px;height:16px;vertical-align:middle'>";
+        showPopup("popupSuccess");
+      }
+    }
 
+    function showPopup(id) {
+      document.getElementById(id).style.display = "block";
+    }
+    function closePopup(id) {
+      document.getElementById(id).style.display = "none";
+    }
+
+    // Fake feed
+    const fakeFeed = document.getElementById("fakeFeed");
+    const names = ["CoolKid123", "NoobSlayer", "EpicRobloxian", "BuildMaster", "ObbyKing", "ProGamer77"];
+    function showFakeFeed() {
+      let user = names[Math.floor(Math.random() * names.length)];
+      let amount = Math.floor(Math.random() * 4001) + 1000; // 1000-5000
+      fakeFeed.innerHTML = user + " cashed out " + amount + " <img src='https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg' style='width:14px;height:14px;vertical-align:middle'>";
+      setTimeout(()=>{ fakeFeed.innerHTML = ""; }, 5000);
+    }
+    setInterval(showFakeFeed, 30000);
+  </script>
 </body>
 </html>
