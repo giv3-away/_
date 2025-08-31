@@ -220,9 +220,23 @@
   <script>
     // Robux counter
     let robux = parseInt(localStorage.getItem("robux") || "0");
+
+    function animateNumber(el, start, end, duration = 600) {
+      const range = end - start;
+      const startTime = performance.now();
+      function step(currentTime) {
+        const progress = Math.min((currentTime - startTime) / duration, 1);
+        const value = Math.floor(start + range * progress);
+        el.innerText = value;
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
     function updateCounter(bump=true) {
       const counter = document.getElementById("robuxCounter");
-      counter.innerText = robux;
+      const currentValue = parseInt(counter.innerText || "0");
+      animateNumber(counter, currentValue, robux, 800);
       if(bump){
         counter.classList.add("bump");
         setTimeout(()=> counter.classList.remove("bump"),300);
