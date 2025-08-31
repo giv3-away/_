@@ -1,137 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Redirecting To Giveaway...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Easy Robux</title>
   <style>
     body {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #ffffff;
       font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
+      margin: 0;
+      background: #f2f5ff;
+      color: #222;
     }
 
-    .message {
-      font-size: 24px;
+    /* Top bar */
+    header {
+      background: #1446FF;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
       font-weight: bold;
-      color: #333;
-      margin-bottom: 20px;
+    }
+    .top-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .top-item img {
+      width: 24px;
+      height: 24px;
     }
 
-    .disclaimer {
-      font-size: 14px;
-      color: #555;
-      max-width: 600px;
-      line-height: 1.5;
-      background-color: #f9f9f9;
+    /* Activity feed */
+    #feed {
+      margin: 20px auto;
       padding: 10px;
+      max-width: 500px;
+      font-size: 15px;
+      background: #fff;
       border-radius: 8px;
-      border: 1px solid #ddd;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
     }
 
-    .hidden-link {
+    /* Offers */
+    #offers {
+      margin: 20px auto;
+      max-width: 500px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      text-align: left;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+    #offers h2 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: #1446FF;
+    }
+    .offer {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+    }
+    .offer:last-child {
+      border-bottom: none;
+    }
+
+    /* Ads */
+    #ads {
+      margin: 30px auto;
+      text-align: center;
+      max-width: 500px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    #ads h2 {
+      color: #1446FF;
+    }
+    .yt-icon {
+      width: 60px;
+      height: 42px;
+      background: #1446FF;
+      display: inline-block;
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+      margin-top: 15px;
+    }
+    button {
+      background: #1446FF;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 20px 0;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #0f34c9;
+    }
+
+    /* Prize progress */
+    #prize {
+      margin: 30px auto;
+      max-width: 500px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    #progressBar {
+      width: 100%;
+      height: 20px;
+      background: #eee;
+      border-radius: 10px;
+      margin: 15px 0;
+      overflow: hidden;
+    }
+    #progressFill {
+      height: 100%;
+      width: 0%;
+      background: #1446FF;
+      transition: width 0.3s;
+    }
+    #claimBtn {
       display: none;
+      background: #1446FF;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
-  <div class="message">Redirecting To Giveaway...</div>
-  <a href="https://singingfiles.com/1838319" class="hidden-link">Continue</a>
+
+  <!-- Top bar -->
+  <header>
+    <div class="top-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" alt="Cash Out">
+      <span>Cash Out</span>
+    </div>
+    <div class="top-item">
+      <span id="robuxCounter">0</span>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" alt="Robux">
+    </div>
+  </header>
+
+  <!-- Activity feed -->
+  <div id="feed">
+    <p><strong>User123</strong> cashed out 200 <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" width="14"></p>
+  </div>
+
+  <!-- Offers -->
+  <section id="offers">
+    <h2>Complete offer for 10 <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" width="14"></h2>
+    <div class="offer">[Offer Placeholder 1]</div>
+    <div class="offer">[Offer Placeholder 2]</div>
+    <div class="offer">[Offer Placeholder 3]</div>
+    <div class="offer">[Offer Placeholder 4]</div>
+  </section>
+
+  <!-- Ads -->
+  <section id="ads">
+    <h2>Watch Ad for 2 <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" width="14"></h2>
+    <div class="yt-icon"></div>
+    <br>
+    <button onclick="watchAd()">▶ Watch Ad</button>
+  </section>
+
+  <!-- Prize progress -->
+  <section id="prize">
+    <h2>Collect 50 <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" width="14"> for a prize</h2>
+    <div id="progressBar">
+      <div id="progressFill"></div>
+    </div>
+    <button id="claimBtn" onclick="claimPrize()">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" width="20">
+    </button>
+  </section>
+
   <script>
-    const targetUrl = 'https://singingfiles.com/1838319';
+    // Robux counter (localStorage)
+    let robux = parseInt(localStorage.getItem("robux") || "0");
+    function updateCounter() {
+      document.getElementById("robuxCounter").innerText = robux;
+      updateProgress();
+    }
+    function addRobux(amount) {
+      robux += amount;
+      localStorage.setItem("robux", robux);
+      updateCounter();
+    }
+    updateCounter();
 
-    function getEnvironment() {
-      const ua = navigator.userAgent.toLowerCase();
-      const isAndroid = ua.includes('android');
-      const isIOS = /iphone|ipad|ipod/.test(ua);
-      const isTikTok = ua.includes('tiktok') || ua.includes('musical_ly');
-      console.log('User Agent:', ua);
-      console.log('Environment:', { isAndroid, isIOS, isTikTok });
-      return { isAndroid, isIOS, isTikTok };
+    // Watch Ad simulation
+    function watchAd() {
+      addRobux(2);
+      addFeed("You earned 2 Robux from watching an ad!");
     }
 
-    function attemptRedirect(url) {
-      console.log('Attempting redirect to:', url);
-      // Method 1: window.location.href
-      try {
-        window.location.href = url;
-        console.log('Redirect via window.location.href attempted');
-      } catch (e) {
-        console.error('window.location.href failed:', e.message);
-        // Method 2: window.location.replace
-        try {
-          window.location.replace(url);
-          console.log('Redirect via window.location.replace attempted');
-        } catch (e2) {
-          console.error('window.location.replace failed:', e2.message);
-          // Method 3: window.open
-          try {
-            window.open(url, '_blank');
-            console.log('Fallback window.open attempted');
-          } catch (e3) {
-            console.error('window.open failed:', e3.message);
-          }
-        }
-      }
+    // Activity feed
+    function addFeed(msg) {
+      const feed = document.getElementById("feed");
+      const p = document.createElement("p");
+      p.innerHTML = msg + ' <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" width="14">';
+      feed.prepend(p);
     }
 
-    function handleRedirect() {
-      console.log('Initiating redirect');
-      const env = getEnvironment();
-      let redirectUrl = targetUrl;
-
-      if (env.isTikTok) {
-        console.log('Detected TikTok in-app browser');
-        if (env.isAndroid) {
-          // Try multiple Android intent schemes
-          const intentUrls = [
-            `intent://${targetUrl.replace('https://', '')}#Intent;scheme=https;package=com.android.chrome;end`,
-            `intent://${targetUrl.replace('https://', '')}#Intent;scheme=http;package=com.android.chrome;end`,
-            `intent://${targetUrl.replace('https://', '')}#Intent;scheme=https;package=com.google.android.webview;end`
-          ];
-          intentUrls.forEach((url, index) => {
-            console.log(`Trying Android intent URL ${index + 1}:`, url);
-            attemptRedirect(url);
-          });
-          // Fallback to direct URL after 1 second
-          setTimeout(() => {
-            console.log('Falling back to direct URL for Android');
-            attemptRedirect(targetUrl);
-          }, 1000);
-        } else if (env.isIOS) {
-          // Try multiple iOS schemes
-          const iosUrls = [
-            `googlechromes://${targetUrl.replace('https://', '')}`,
-            `googles://${targetUrl.replace('https://', '')}`,
-            `safari://${targetUrl.replace('https://', '')}`
-          ];
-          iosUrls.forEach((url, index) => {
-            console.log(`Trying iOS scheme ${index + 1}:`, url);
-            attemptRedirect(url);
-          });
-          // Fallback to direct URL after 1 second
-          setTimeout(() => {
-            console.log('Falling back to direct URL for iOS');
-            attemptRedirect(targetUrl);
-          }, 1000);
-        }
+    // Prize system
+    function updateProgress() {
+      const percent = Math.min((robux % 50) / 50 * 100, 100);
+      document.getElementById("progressFill").style.width = percent + "%";
+      if (robux % 50 === 0 && robux > 0) {
+        document.getElementById("claimBtn").style.display = "inline-block";
       } else {
-        console.log('Detected standard browser, using direct redirect');
-        attemptRedirect(targetUrl);
+        document.getElementById("claimBtn").style.display = "none";
       }
     }
-
-    setTimeout(() => {
-      console.log('Page loaded, triggering redirect');
-      handleRedirect();
-    }, 500);
+    function claimPrize() {
+      const bonus = Math.floor(Math.random() * 11) + 10; // 10–20
+      addRobux(bonus);
+      addFeed("You claimed a prize of " + bonus + " Robux!");
+      document.getElementById("claimBtn").style.display = "none";
+    }
   </script>
+
 </body>
 </html>
