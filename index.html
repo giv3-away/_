@@ -145,15 +145,13 @@
     <!-- Offers -->
     <section id="offerwall">
       <h2>Complete offer for 10 Robux</h2>
-      <div style="height:150px; overflow-y:auto;">
-        <!-- Offers list will go here later -->
-      </div>
+      <button style="font-size:20px; padding:6px 12px;" onclick="showRewardPopup(10,'offer')">Complete Offer</button>
     </section>
 
     <!-- Ads -->
     <section id="ads">
       <h2>Watch Ad for 2 Robux</h2>
-      <button onclick="addRobux(2)">▶️</button>
+      <button onclick="showRewardPopup(2,'ad')">▶️</button>
     </section>
 
     <!-- Reward -->
@@ -162,7 +160,7 @@
       <div class="progress-container">
         <div class="progress-bar" id="progressBar"></div>
       </div>
-      <button id="rewardButton" style="display:none;" onclick="collectReward()">💰</button>
+      <button id="rewardButton" style="display:none;" onclick="randomPrize()">💰</button>
     </section>
   </main>
 
@@ -188,17 +186,17 @@
     <small>Might take some time.</small>
   </div>
 
+  <!-- Reward Popup -->
+  <div class="popup" id="popupReward">
+    <p id="rewardMessage"></p>
+    <button onclick="claimReward()">Claim</button>
+  </div>
+
   <script>
     // Robux counter
     let robux = parseInt(localStorage.getItem("robux") || "0");
     function updateCounter() {
       document.getElementById("robuxCounter").innerText = robux;
-    }
-    function addRobux(amount) {
-      robux += amount;
-      localStorage.setItem("robux", robux);
-      updateCounter();
-      updateProgress(amount);
     }
     updateCounter();
 
@@ -212,12 +210,33 @@
       }
       document.getElementById("progressBar").style.width = (progress/50*100) + "%";
     }
-    function collectReward() {
-      let reward = Math.floor(Math.random() * 11) + 10; // 10-20
-      addRobux(reward);
+
+    // Reward system
+    let pendingReward = 0;
+    function showRewardPopup(amount, type) {
+      pendingReward = amount;
+      if(type === "ad"){
+        document.getElementById("rewardMessage").innerText = "You won 2 Robux from watching an ad";
+      } else if(type === "offer"){
+        document.getElementById("rewardMessage").innerText = "You won 10 Robux from completing an offer";
+      }
+      showPopup("popupReward");
+      updateProgress(amount);
+    }
+    function randomPrize() {
+      let prize = Math.floor(Math.random() * 11) + 10; // 10-20
+      pendingReward = prize;
+      document.getElementById("rewardMessage").innerText = "You won " + prize + " Robux";
+      showPopup("popupReward");
       progress = 0;
       document.getElementById("progressBar").style.width = "0%";
       document.getElementById("rewardButton").style.display = "none";
+    }
+    function claimReward() {
+      robux += pendingReward;
+      localStorage.setItem("robux", robux);
+      updateCounter();
+      closePopup("popupReward");
     }
 
     // Cashout system
