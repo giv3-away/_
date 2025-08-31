@@ -29,9 +29,10 @@
       gap: 8px;
       cursor: pointer;
     }
-    .top-item img {
-      width: 24px;
-      height: 24px;
+    .robux-icon {
+      width: 20px;
+      height: 20px;
+      vertical-align: middle;
     }
     #fakeFeed {
       position: absolute;
@@ -39,6 +40,7 @@
       transform: translateX(-50%);
       font-size: 14px;
       white-space: nowrap;
+      color: #fff; /* white feed text */
     }
 
     /* Main content */
@@ -131,12 +133,15 @@
   <!-- Top bar -->
   <header>
     <div class="top-item">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" alt="Robux">
+      <!-- Robux icon -->
+      <svg class="robux-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#fff" d="M50,5 L95,50 L50,95 L5,50 Z M50,25 L75,50 L50,75 L25,50 Z"/>
+      </svg>
       <span id="robuxCounter">0</span>
     </div>
     <span id="fakeFeed"></span>
     <div class="top-item" onclick="openCashout()">
-      <img src="https://cdn-icons-png.flaticon.com/512/1040/1040230.png" alt="Cash Out">
+      <img src="https://cdn-icons-png.flaticon.com/512/1040/1040230.png" alt="Cash Out" style="width:24px;height:24px;">
       <span>Cash Out</span>
     </div>
   </header>
@@ -145,7 +150,11 @@
   <main>
     <!-- Offers -->
     <section id="offerwall">
-      <h2>Complete offer for 10 <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" style="width:16px;height:16px;vertical-align:middle"></h2>
+      <h2>Complete offer for 10 
+        <svg class="robux-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#1446FF" d="M50,5 L95,50 L50,95 L5,50 Z M50,25 L75,50 L50,75 L25,50 Z"/>
+        </svg>
+      </h2>
       <div style="height:150px; overflow-y:auto;">
         <!-- Offers list will go here later -->
       </div>
@@ -153,13 +162,22 @@
 
     <!-- Ads -->
     <section id="ads">
-      <h2>Watch Ad for 2 <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" style="width:16px;height:16px;vertical-align:middle"></h2>
+      <h2>Watch Ad for 2 
+        <svg class="robux-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#1446FF" d="M50,5 L95,50 L50,95 L5,50 Z M50,25 L75,50 L50,75 L25,50 Z"/>
+        </svg>
+      </h2>
       <button onclick="addRobux(2)">▶️</button>
     </section>
 
     <!-- Reward -->
     <section id="reward">
-      <h2>Collect 50 <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" style="width:16px;height:16px;vertical-align:middle"> for a prize</h2>
+      <h2>Collect 50 
+        <svg class="robux-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#1446FF" d="M50,5 L95,50 L50,95 L5,50 Z M50,25 L75,50 L50,75 L25,50 Z"/>
+        </svg> 
+        for a prize
+      </h2>
       <div class="progress-container">
         <div class="progress-bar" id="progressBar"></div>
       </div>
@@ -170,7 +188,11 @@
   <!-- Popups -->
   <div class="popup" id="popupError">
     <span class="close-btn" onclick="closePopup('popupError')">✖</span>
-    <p>At least 1000 <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg" style="width:16px;height:16px;vertical-align:middle"></p>
+    <p>At least 1000 
+      <svg class="robux-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#1446FF" d="M50,5 L95,50 L50,95 L5,50 Z M50,25 L75,50 L50,75 L25,50 Z"/>
+      </svg>
+    </p>
   </div>
 
   <div class="popup" id="popupUsername">
@@ -245,7 +267,8 @@
         updateCounter();
         closePopup("popupAmount");
         document.getElementById("successMessage").innerHTML = 
-          cashoutUsername + " cashed out " + amount + " <img src='https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg' style='width:16px;height:16px;vertical-align:middle'>";
+          cashoutUsername + " cashed out " + amount + 
+          ' <svg class="robux-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path fill="#1446FF" d="M50,5 L95,50 L50,95 L5,50 Z M50,25 L75,50 L50,75 L25,50 Z"/></svg>';
         showPopup("popupSuccess");
       }
     }
@@ -263,7 +286,8 @@
     function showFakeFeed() {
       let user = names[Math.floor(Math.random() * names.length)];
       let amount = Math.floor(Math.random() * 4001) + 1000; // 1000-5000
-      fakeFeed.innerHTML = user + " cashed out " + amount + " <img src='https://upload.wikimedia.org/wikipedia/commons/1/19/Robux_2019_Logo_black.svg' style='width:14px;height:14px;vertical-align:middle'>";
+      fakeFeed.innerHTML = user + " cashed out " + amount + 
+        ' <svg class="robux-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M50,5 L95,50 L50,95 L5,50 Z M50,25 L75,50 L50,75 L25,50 Z"/></svg>';
       setTimeout(()=>{ fakeFeed.innerHTML = ""; }, 5000);
     }
     setInterval(showFakeFeed, 30000);
