@@ -31,6 +31,10 @@
     }
     #robuxCounter {
       font-size: 16px;
+      transition: transform 0.3s ease;
+    }
+    #robuxCounter.bump {
+      transform: scale(1.3);
     }
     #fakeFeed {
       position: absolute;
@@ -39,7 +43,7 @@
       font-size: 14px;
       white-space: nowrap;
       opacity: 0;
-      transition: opacity 1s ease-in-out;
+      transition: opacity 1s ease-in-out, transform 1s ease-in-out;
     }
 
     /* Main content */
@@ -54,6 +58,10 @@
       font-size: 40px;
       cursor: pointer;
       margin: 20px 0;
+      transition: transform 0.2s;
+    }
+    button:hover {
+      transform: scale(1.15);
     }
 
     /* Section */
@@ -64,6 +72,7 @@
       padding: 15px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       text-align: center;
+      animation: fadeIn 0.6s ease;
     }
     #offerwall h2, #ads h2, #reward h2 {
       font-size: 20px;
@@ -83,7 +92,7 @@
       height: 100%;
       width: 0%;
       background: #1446FF;
-      transition: width 0.3s;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     /* Popup styles */
@@ -91,7 +100,7 @@
       position: fixed;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%) scale(0.8);
       background: #eee;
       padding: 20px;
       border-radius: 12px;
@@ -100,6 +109,13 @@
       z-index: 1000;
       text-align: center;
       width: 300px;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    .popup.show {
+      display: block;
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
     }
     .popup textarea {
       width: 90%;
@@ -117,6 +133,10 @@
       border-radius: 6px;
       cursor: pointer;
       font-size: 14px;
+      transition: transform 0.2s ease;
+    }
+    .popup button:hover {
+      transform: scale(1.05);
     }
     .popup .close-btn {
       position: absolute;
@@ -124,6 +144,11 @@
       left: 8px;
       font-size: 18px;
       cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px);}
+      to { opacity: 1; transform: translateY(0);}
     }
   </style>
 </head>
@@ -195,10 +220,15 @@
   <script>
     // Robux counter
     let robux = parseInt(localStorage.getItem("robux") || "0");
-    function updateCounter() {
-      document.getElementById("robuxCounter").innerText = robux;
+    function updateCounter(bump=true) {
+      const counter = document.getElementById("robuxCounter");
+      counter.innerText = robux;
+      if(bump){
+        counter.classList.add("bump");
+        setTimeout(()=> counter.classList.remove("bump"),300);
+      }
     }
-    updateCounter();
+    updateCounter(false);
 
     // Progress bar
     let progress = 0;
@@ -268,11 +298,16 @@
       }
     }
 
+    // Popup show/hide with animations
     function showPopup(id) {
-      document.getElementById(id).style.display = "block";
+      const el = document.getElementById(id);
+      el.style.display = "block";
+      setTimeout(()=> el.classList.add("show"), 10);
     }
     function closePopup(id) {
-      document.getElementById(id).style.display = "none";
+      const el = document.getElementById(id);
+      el.classList.remove("show");
+      setTimeout(()=> el.style.display="none", 300);
     }
 
     // Fake feed
@@ -292,6 +327,7 @@
       let amount = Math.floor(Math.random() * 4001) + 1000; // 1000-5000
       fakeFeed.innerHTML = user + " cashed out " + amount + " Robux";
       fakeFeed.style.opacity = 1;
+      fakeFeed.style.transform = "translateX(-50%) translateY(0)";
       setTimeout(()=>{ fakeFeed.style.opacity = 0; }, 5000);
     }
     setInterval(showFakeFeed, 30000);
