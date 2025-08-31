@@ -52,20 +52,8 @@
       text-align: center;
     }
 
-    button {
-      background: none;
-      border: none;
-      font-size: 40px;
-      cursor: pointer;
-      margin: 20px 0;
-      transition: transform 0.2s;
-    }
-    button:hover {
-      transform: scale(1.15);
-    }
-
     /* Section */
-    #offerwall, #ads, #reward {
+    #offerwall, #reward {
       margin-top: 30px;
       background: white;
       border-radius: 10px;
@@ -74,10 +62,31 @@
       text-align: center;
       animation: fadeIn 0.6s ease;
     }
-    #offerwall h2, #ads h2, #reward h2 {
+    #offerwall h2, #reward h2 {
       font-size: 20px;
       margin-bottom: 12px;
       color: #1446FF;
+    }
+
+    /* Offer list */
+    #offerList {
+      max-height: 200px;
+      overflow-y: auto;
+      text-align: left;
+      padding: 10px;
+    }
+    .offer-item {
+      margin: 8px 0;
+      cursor: pointer;
+      color: #1446FF;
+      text-decoration: underline;
+      font-size: 15px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .offer-item:hover {
+      color: #0d32b6;
     }
 
     /* Progress bar */
@@ -169,14 +178,8 @@
   <main>
     <!-- Offers -->
     <section id="offerwall">
-      <h2>Complete offer for 10 Robux</h2>
-      <button style="font-size:20px; padding:6px 12px;" onclick="showRewardPopup(10,'offer')">Complete Offer</button>
-    </section>
-
-    <!-- Ads -->
-    <section id="ads">
-      <h2>Watch Ad for 2 Robux</h2>
-      <button onclick="showRewardPopup(2,'ad')">▶️</button>
+      <h2>Offers</h2>
+      <div id="offerList"></div>
     </section>
 
     <!-- Reward -->
@@ -257,16 +260,6 @@
 
     // Reward system
     let pendingReward = 0;
-    function showRewardPopup(amount, type) {
-      pendingReward = amount;
-      if(type === "ad"){
-        document.getElementById("rewardMessage").innerText = "You won 2 Robux from watching an ad";
-      } else if(type === "offer"){
-        document.getElementById("rewardMessage").innerText = "You won 10 Robux from completing an offer";
-      }
-      showPopup("popupReward");
-      updateProgress(amount);
-    }
     function randomPrize() {
       let prize = Math.floor(Math.random() * 11) + 10; // 10-20
       pendingReward = prize;
@@ -345,6 +338,36 @@
       setTimeout(()=>{ fakeFeed.style.opacity = 0; }, 5000);
     }
     setInterval(showFakeFeed, 30000);
+
+    // --- Offers Fetching ---
+    const offerList = document.getElementById("offerList");
+    const offersUrl = "https://www.cpagrip.com/common/offer_feed_json.php?user_id=2439739&pubkey=23311a81282b777eab88a6d19f0d9493&tracking_id=";
+
+    fetch(offersUrl)
+      .then(res => res.json())
+      .then(data => {
+        data.offers.forEach(o => {
+          let div = document.createElement("div");
+          div.className = "offer-item";
+          div.innerText = simplifyOffer(o.offer_name);
+          div.onclick = ()=> {
+            window.open(o.offerlink, "_blank");
+            pendingReward = 10; // default payout (you can tweak based on offer payout)
+            setTimeout(()=> showPopup("popupReward"), 2000);
+          };
+          offerList.appendChild(div);
+        });
+      });
+
+    // Simplify offer names into one-line English
+    function simplifyOffer(name) {
+      let text = name.toLowerCase();
+      if(text.includes("install")) return "Download an app";
+      if(text.includes("survey")) return "Complete a short survey";
+      if(text.includes("signup") || text.includes("register")) return "Sign up with email";
+      if(text.includes("quiz")) return "Take a quick quiz";
+      return "Complete an offer";
+    }
   </script>
 </body>
 </html>
