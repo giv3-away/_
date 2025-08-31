@@ -30,17 +30,27 @@
       cursor: pointer;
     }
     .robux-icon {
-      width: 20px;
-      height: 20px;
-      vertical-align: middle;
+      width: 22px;
+      height: 22px;
+      display: inline-block;
     }
+    .robux-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+    /* For top bar */
+    .robux-top svg .bg { fill: #1446FF; }
+    /* For white cards */
+    .robux-card svg .bg { fill: #fff; }
+
     #fakeFeed {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
       font-size: 14px;
       white-space: nowrap;
-      color: #fff; /* white feed text */
+      color: #fff;
+      display: none;
     }
 
     /* Main content */
@@ -49,15 +59,15 @@
       text-align: center;
     }
 
-    button {
+    button.ad-btn {
       background: none;
       border: none;
-      font-size: 40px;
+      font-size: 50px;
       cursor: pointer;
       margin: 20px 0;
     }
 
-    /* Section */
+    /* Sections */
     #offerwall, #ads, #reward {
       margin-top: 30px;
       background: white;
@@ -133,162 +143,143 @@
   <!-- Top bar -->
   <header>
     <div class="top-item">
-      <!-- Robux icon -->
-      <svg class="robux-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <path fill="#fff" d="M50,5 L95,50 L50,95 L5,50 Z M50,25 L75,50 L50,75 L25,50 Z"/>
-      </svg>
+      <span class="robux-icon robux-top">
+        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+          <rect class="bg" width="512" height="512" rx="100"/>
+          <path d="M256 100l156 156-156 156-156-156z" fill="white"/>
+        </svg>
+      </span>
       <span id="robuxCounter">0</span>
     </div>
-    <span id="fakeFeed"></span>
-    <div class="top-item" onclick="openCashout()">
-      <img src="https://cdn-icons-png.flaticon.com/512/1040/1040230.png" alt="Cash Out" style="width:24px;height:24px;">
+    <div class="top-item" id="cashoutBtn">
+      <span class="robux-icon robux-top">
+        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+          <rect class="bg" width="512" height="512" rx="100"/>
+          <path d="M256 100l156 156-156 156-156-156z" fill="white"/>
+        </svg>
+      </span>
       <span>Cash Out</span>
     </div>
+    <span id="fakeFeed"></span>
   </header>
 
   <!-- Main -->
   <main>
-    <!-- Offers -->
-    <section id="offerwall">
-      <h2>Complete offer for 10 
-        <svg class="robux-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <path fill="#1446FF" d="M50,5 L95,50 L50,95 L5,50 Z M50,25 L75,50 L50,75 L25,50 Z"/>
-        </svg>
-      </h2>
-      <div style="height:150px; overflow-y:auto;">
-        <!-- Offers list will go here later -->
-      </div>
-    </section>
-
     <!-- Ads -->
     <section id="ads">
-      <h2>Watch Ad for 2 
-        <svg class="robux-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <path fill="#1446FF" d="M50,5 L95,50 L50,95 L5,50 Z M50,25 L75,50 L50,75 L25,50 Z"/>
-        </svg>
+      <h2>Complete offer for 10 
+        <span class="robux-icon robux-card">
+          <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <rect class="bg" width="512" height="512" rx="100"/>
+            <path d="M256 100l156 156-156 156-156-156z" fill="black"/>
+          </svg>
+        </span>
       </h2>
-      <button onclick="addRobux(2)">▶️</button>
+      <button class="ad-btn" onclick="watchAd()">▶️</button>
     </section>
 
-    <!-- Reward -->
+    <!-- Reward progress -->
     <section id="reward">
-      <h2>Collect 50 
-        <svg class="robux-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <path fill="#1446FF" d="M50,5 L95,50 L50,95 L5,50 Z M50,25 L75,50 L50,75 L25,50 Z"/>
-        </svg> 
-        for a prize
-      </h2>
+      <h2>Your Progress</h2>
       <div class="progress-container">
         <div class="progress-bar" id="progressBar"></div>
       </div>
-      <button id="rewardButton" style="display:none;" onclick="collectReward()">💰</button>
     </section>
   </main>
 
   <!-- Popups -->
-  <div class="popup" id="popupError">
-    <span class="close-btn" onclick="closePopup('popupError')">✖</span>
-    <p>At least 1000 
-      <svg class="robux-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <path fill="#1446FF" d="M50,5 L95,50 L50,95 L5,50 Z M50,25 L75,50 L50,75 L25,50 Z"/>
-      </svg>
-    </p>
+  <div class="popup" id="popupMessage">
+    <span class="close-btn" onclick="closePopup('popupMessage')">✖</span>
+    <p id="popupText"></p>
   </div>
 
   <div class="popup" id="popupUsername">
-    <textarea placeholder="Username..."></textarea>
+    <textarea id="usernameInput" placeholder="Username..."></textarea>
     <button onclick="confirmUsername()">Confirm</button>
   </div>
 
   <div class="popup" id="popupAmount">
-    <textarea placeholder="Amount of Robux..."></textarea>
+    <textarea id="amountInput" placeholder="Amount of Robux..."></textarea>
     <button onclick="confirmAmount()">Confirm</button>
   </div>
 
-  <div class="popup" id="popupSuccess">
-    <span class="close-btn" onclick="closePopup('popupSuccess')">✖</span>
-    <p id="successMessage"></p>
+  <div class="popup" id="popupFinal">
+    <span class="close-btn" onclick="closePopup('popupFinal')">✖</span>
+    <p id="finalText"></p>
     <small>Might take some time.</small>
   </div>
 
   <script>
     // Robux counter
     let robux = parseInt(localStorage.getItem("robux") || "0");
+    let username = "";
+    let amount = 0;
+
     function updateCounter() {
       document.getElementById("robuxCounter").innerText = robux;
     }
-    function addRobux(amount) {
-      robux += amount;
-      localStorage.setItem("robux", robux);
-      updateCounter();
-      updateProgress(amount);
-    }
     updateCounter();
 
-    // Progress bar
-    let progress = 0;
-    function updateProgress(amount) {
-      progress += amount;
-      if (progress >= 50) {
-        progress = 50;
-        document.getElementById("rewardButton").style.display = "inline-block";
-      }
-      document.getElementById("progressBar").style.width = (progress/50*100) + "%";
-    }
-    function collectReward() {
-      let reward = Math.floor(Math.random() * 11) + 10; // 10-20
-      addRobux(reward);
-      progress = 0;
-      document.getElementById("progressBar").style.width = "0%";
-      document.getElementById("rewardButton").style.display = "none";
+    function watchAd() {
+      robux += 10;
+      localStorage.setItem("robux", robux);
+      updateCounter();
+      updateProgress();
     }
 
-    // Cashout system
-    let cashoutUsername = "";
-    function openCashout() {
+    // Progress bar
+    function updateProgress() {
+      let percent = Math.min((robux / 5000) * 100, 100);
+      document.getElementById("progressBar").style.width = percent + "%";
+    }
+    updateProgress();
+
+    // Cashout logic
+    document.getElementById("cashoutBtn").onclick = () => {
       if (robux < 1000) {
-        showPopup("popupError");
+        document.getElementById("popupText").innerHTML = 
+          "At least 1000 <span class='robux-icon robux-card'><svg viewBox='0 0 512 512'><rect class='bg' width='512' height='512' rx='100'/><path d='M256 100l156 156-156 156-156-156z' fill='black'/></svg></span> required";
+        document.getElementById("popupMessage").style.display = "block";
       } else {
-        showPopup("popupUsername");
+        document.getElementById("popupUsername").style.display = "block";
       }
-    }
+    };
+
     function confirmUsername() {
-      cashoutUsername = document.querySelector("#popupUsername textarea").value.trim();
-      if (cashoutUsername) {
-        closePopup("popupUsername");
-        showPopup("popupAmount");
+      username = document.getElementById("usernameInput").value.trim();
+      if (username) {
+        document.getElementById("popupUsername").style.display = "none";
+        document.getElementById("popupAmount").style.display = "block";
       }
     }
+
     function confirmAmount() {
-      let amount = parseInt(document.querySelector("#popupAmount textarea").value.trim());
-      if (!isNaN(amount) && amount > 0 && amount <= robux) {
+      amount = parseInt(document.getElementById("amountInput").value.trim());
+      if (amount > 0 && amount <= robux) {
+        document.getElementById("popupAmount").style.display = "none";
+        document.getElementById("finalText").innerHTML = 
+          username + " cashed out " + amount + " <span class='robux-icon robux-card'><svg viewBox='0 0 512 512'><rect class='bg' width='512' height='512' rx='100'/><path d='M256 100l156 156-156 156-156-156z' fill='black'/></svg></span>";
+        document.getElementById("popupFinal").style.display = "block";
         robux -= amount;
         localStorage.setItem("robux", robux);
         updateCounter();
-        closePopup("popupAmount");
-        document.getElementById("successMessage").innerHTML = 
-          cashoutUsername + " cashed out " + amount + 
-          ' <svg class="robux-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path fill="#1446FF" d="M50,5 L95,50 L50,95 L5,50 Z M50,25 L75,50 L50,75 L25,50 Z"/></svg>';
-        showPopup("popupSuccess");
+        updateProgress();
       }
     }
 
-    function showPopup(id) {
-      document.getElementById(id).style.display = "block";
-    }
     function closePopup(id) {
       document.getElementById(id).style.display = "none";
     }
 
     // Fake feed
     const fakeFeed = document.getElementById("fakeFeed");
-    const names = ["CoolKid123", "NoobSlayer", "EpicRobloxian", "BuildMaster", "ObbyKing", "ProGamer77"];
+    const users = ["xPro123", "NoobSlayer", "KittyLover", "DarkNinja", "Guest777"];
     function showFakeFeed() {
-      let user = names[Math.floor(Math.random() * names.length)];
-      let amount = Math.floor(Math.random() * 4001) + 1000; // 1000-5000
-      fakeFeed.innerHTML = user + " cashed out " + amount + 
-        ' <svg class="robux-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M50,5 L95,50 L50,95 L5,50 Z M50,25 L75,50 L50,75 L25,50 Z"/></svg>';
-      setTimeout(()=>{ fakeFeed.innerHTML = ""; }, 5000);
+      const user = users[Math.floor(Math.random() * users.length)];
+      const amt = Math.floor(Math.random() * 4000) + 1000;
+      fakeFeed.innerHTML = user + " cashed out " + amt + " <span class='robux-icon robux-top'><svg viewBox='0 0 512 512'><rect class='bg' width='512' height='512' rx='100'/><path d='M256 100l156 156-156 156-156-156z' fill='white'/></svg></span>";
+      fakeFeed.style.display = "block";
+      setTimeout(() => { fakeFeed.style.display = "none"; }, 5000);
     }
     setInterval(showFakeFeed, 30000);
   </script>
